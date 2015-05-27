@@ -1,0 +1,74 @@
+% Chapter 1
+
+\chapter{Testing} % Main chapter title
+
+\label{Chapter3} % For referencing the chapter elsewhere, use \ref{Chapter1} 
+
+\lhead{Chapter 3. \emph{Testing}} % This is for the header on each page - perhaps a shortened title
+
+Testing the outcomes of a model is an integral part of modeling dependencies since it gives a handle to tell how good the reality can be approximated.
+For doing so, many different measures and methodologies have been developed, all targeting a different part of the question what a "good" model should be. There are measures like the mean squared error and the mean absolute error that quantify the difference between the observed data points and the values predicted from the model. These can be thought of as in-sample error metrics since the data to construct the model is also used to estimate the error. Intuitively, this seems like a good idea because the data is all one has to construct a model and therefore the best fit has the highest probability of producing consistent results. In reality, this can cause a phenomenon called "overfitting" where the model is so much adjusted to the data that it has a low in-sample error but performs poorly on unseen data. This cane even lead to the conviction that some of the data has to be excluded because the worsen the fit.
+There is a difference between function approximation and learning a model. In function approximation the goal is to estimate the parameters of a model so that the final function matches the given data the closest. In learning a model the underlying dependencies are usually not known and the data only represent a subset of the whole range of possible values, often including some noise. Hence, the task in learning a model is to match the model complexity  to the data resources~\citep{LearningFromData}. Particular in a scenario of estimating natural hazard it would be desirable to have a measure that can tell from a sample of data points something about how the model might behave predicting on unseen data.\\
+
+%----------------------------------------------------------------------------------------
+
+\section{Learning and Test set}
+One common approach to get a handle of a models' out-of-sample or prediction performance is to divide the data from which the models parameters should be estimated into a learning or training data set and a test data set. Then the learning data is used to estimate the parameters and the models performance is tested on the test data set. This has the effect of simulating unseen data since the test data has not been used for learning the models parameters.
+
+\begin{table}[h]
+\begin{tabular}{ l l l l l  }
+ \hline
+ \multicolumn{5}{c}{error measure} \\
+ \hline
+ net & mean & median & mode & probability\\
+ \hline
+ causal   & 4.816    & 4.933  & 9.739   &-1.772\\
+ naive   & 1.488      & 1.801 & 1.937  &-1.35\\
+ hill-climber   & 1.068      & 1.339 & 1.503  &-1.016\\
+ grow-shrink   & 0.844     & 1.124  & 1.149 &-0.874\\
+ 
+\end{tabular}
+\caption[errors]{error measures}
+\label{tab:2}
+\end{table}
+%----------------------------------------------------------------------------------------
+
+\section{Crossvalidation}
+
+
+\begin{table}[h]
+\begin{tabular}{ l l l l l  }
+ \hline
+ \multicolumn{5}{c}{error measure} \\
+ \hline
+ net & mean & median & mode & probability\\
+ \hline
+ causal   & 4.904    & 5.066  & 9.421   &-1.764\\
+ naive   & 1.482      & 1.703 & 1.762  &-1.342\\
+ hill-climber   & 1.041      & 1.488 & 1.503  &-1.017\\
+ grow-shrink   & 0.823     & 1.202  & 1.149 &-0.875\\
+ 
+\end{tabular}
+\caption[errors]{error measures}
+\label{tab:3}
+\end{table}
+%----------------------------------------------------------------------------------------
+
+\section{Bias and Variance Decomposition}
+
+\begin{table}[h]
+\begin{tabular}{ l l l l }
+ \hline
+ \multicolumn{4}{c}{error measure} \\
+ \hline
+ net & mean(sd) & median(sd) & mode(sd) \\
+ \hline
+ causal   & 4.904(0.1085)    & 5.066(0.1312)  & 9.421(0.3576)\\
+ naive   & 1.482 (0.0478)     & 1.703 (0.0426)& 1.762 (0.0909)\\
+ hill-climber   & 1.041 (0.0377)     & 1.488 (0.0661) & 1.503(0.0757))\\
+ grow-shrink   & 0.823  (0.0317)   & 1.202 (0.0483) & 1.149 (0.0578)\\
+ 
+\end{tabular}
+\caption[errors]{error measures}
+\label{tab:4}
+\end{table}
