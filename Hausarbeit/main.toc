@@ -3,16 +3,17 @@
 \contentsline {chapter}{List of Tables}{iii}{dummy.5}
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.7}
 \contentsline {chapter}{\numberline {2}Learning Bayesian Networks}{2}{chapter.8}
-\contentsline {section}{\numberline {2.1}Building Bayesian Networks}{2}{section.9}
-\contentsline {section}{\numberline {2.2}Parameter Learning}{10}{section.18}
-\contentsline {chapter}{\numberline {3}Testing}{11}{chapter.19}
-\contentsline {section}{\numberline {3.1}Learning and Test set}{12}{section.20}
-\contentsline {section}{\numberline {3.2}Crossvalidation}{12}{section.22}
-\contentsline {section}{\numberline {3.3}Bias and Variance Decomposition}{12}{section.24}
-\contentsline {chapter}{\numberline {4}Conclusions}{13}{chapter.26}
+\contentsline {section}{\numberline {2.1}Building Bayesian Networks}{3}{section.9}
+\contentsline {section}{\numberline {2.2}Parameter Learning}{9}{section.18}
+\contentsline {chapter}{\numberline {3}Testing}{10}{chapter.19}
+\contentsline {section}{\numberline {3.1}Learning and Test set}{11}{section.20}
+\contentsline {section}{\numberline {3.2}Crossvalidation}{11}{section.22}
+\contentsline {section}{\numberline {3.3}Bias and Variance Decomposition}{11}{section.24}
+\contentsline {chapter}{\numberline {4}Conclusions}{13}{chapter.27}
 \vspace {2em}
-\contentsline {chapter}{\numberline {A}Scatterplot of all the variables}{14}{appendix.27}
-\contentsline {chapter}{\numberline {B}Folds of Learned Networks: Hill-Climber}{15}{appendix.29}
-\contentsline {chapter}{\numberline {C}Folds of Learned Networks: Grow-Shrink}{16}{appendix.31}
+\contentsline {chapter}{\numberline {A}Additional Figures}{14}{appendix.28}
+\contentsline {section}{\numberline {A.1}Scatterplot of all the variables}{15}{section.29}
+\contentsline {section}{\numberline {A.2}Folds of Learned Networks: Hill-Climber}{16}{section.31}
+\contentsline {section}{\numberline {A.3}Folds of Learned Networks: Grow-Shrink}{17}{section.33}
 \vspace {2em}
-\contentsline {chapter}{References}{17}{dummy.33}
+\contentsline {chapter}{References}{18}{dummy.35}

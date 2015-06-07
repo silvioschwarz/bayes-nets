@@ -7,6 +7,7 @@
 \lhead{Chapter 2. \emph{Learning}} % This is for the header on each page - perhaps a shortened title
 Bayesian networks are directed acyclic graphs (DAG). They are representations of the dependence structure among a set of random variables. The conditional dependencies between the random variables are visualized by directed edges and the random variables them self are the nodes of the network. Through the directed edges it is possibly to identify a hierarchy. The source of a directed edge is called a parent of the receiving node and the receiver is called a child of the source node. Besides the dependence structure each node in the Bayesian Network carries a probability distribution conditional on their parents. In the case of discrete distributions this becomes a probability table.\\
 The advantage of using a Bayesian Network is that it represents the joint probability over all the random variables considered. With that it is possible to answer conditional queries through the laws of probability theory. Through the structure of the network it is possible to factorize the joint probability distribution leading to less parameters to estimate and a more efficient computation than considering all possible combinations without losing anything. For the task of the evaluation of natural hazard, and in this specific case of ground motion, Bayesian Networks provide a way to compute the full distribution of the target variable and are thus an efficient and consistent way of dealing with uncertainty. 
+\newpage
 
 %----------------------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ Considering the naive Bayes independence assumption is quite a harsh cut since i
 
 \begin{figure}[!htpb]
 	\centering
-		\includegraphics[scale=0.45]{Figures/naive.png}
+		\includegraphics[scale=0.33]{Figures/naive.pdf}
 		\rule{35em}{0.5pt}
 	\caption[Naive Bayes Network]{A naive Bayes Network of the variables.}
 	\label{fig:naive}
@@ -62,7 +63,7 @@ Another way of setting up the structure of a Bayesian Network is to rely on expe
 
 \begin{figure}[!h]
 	\centering
-		\includegraphics[scale=0.45]{Figures/causal.png}
+		\includegraphics[scale=0.33]{Figures/causal.pdf}
 		\rule{35em}{0.5pt}
 	\caption[Causal Network]{A causal network representing the beliefs in dependency based on expert knowledge.}
 	\label{fig:causal}
@@ -74,7 +75,7 @@ One could also have had a look at the data \ref{AppendixA}. Clearly PGA depends 
 "If a data set has affected any step in the learning process, its ability to assess the outcome has been compromised. \citep{LearningFromData}"
 \end{quote}
 From a Bayesian point of view one can say that looking at the data to decide any further steps in the analyses is in itself a step of learning. One goes from a state of ignorance where all hypotheses (in this case the structure of the Bayesian net) have equal probability over to excluding certain hypotheses that don't seem to capture the relationships one has seen. This is essential starting with a uniform distribution as a prior to setting some of the probabilities to zero. The danger is that the model is overfitted and so performs poorly on unseen data. In a Bayesian framework the prior can be thought of as a regularization parameter that guards against overfitting. But for this mechanism to work it is best to have some sort of naive??? prior and not to "fit" the prior on data to have a superb in-sample-error but poor out-of-sample performance.\\
-Another way to set up causal networks is to consult literatur about the topic, In the case of Bayesian Networks for ground motion prediction sources could be \citep{kuehn2010} or \citep{Vogel2014}.\\
+Another way to set up causal networks is to consult literatur about the topic, In the case of Bayesian Networks for ground motion prediction sources could be \cite{kuehn2010} or \cite{Vogel2014}.\\
 
 A third way of defining the structure of a Bayesian network is to learn it from the data itself. Often, not all dependencies between the variables are known and as was seen in causal networks, human domain knowledge can also be misleading and sometimes a strong assumption as it limits the hypothesis space of possible networks vastly. So it is a natural extension to ask whether there are principled ways in the framework of Bayesian networks to let also the structure come from the data. In a sense, according to the Bayesian paradigm, the structure of a network becomes a random variable, too and the task is to jointly estimate the parameters and the structure from the data. In the scope of this paper the constraint-based Grow-Shrink algorithm~\citep{margaritis2003} and the score-based hill-climber are explored.\\
 Constraint-based algorithms perform independence tests between the random variables and then set up a network according to the found independencies. The task is therefore one of finding the best minimal I-map. An I-map or independence map is a graph whose independence statements hold for the probability distribution one tries to model. In the case where the graph captures all independence statements this is a perfect I-map. A minimal I-map is graph that is rendered not an I-map anymore by the removal of one edge. This is an important definition because the complete graph over a set of random variables is also an I-map but does not reveal any independencies and therefore carries parameters that are redundant.In practice one doe not find one single best minimal I-map but a class of graphs that carry the same independence statements and are therefore called I-equivalent~\citep{koller2009}. 
@@ -91,7 +92,7 @@ I(X;Y) = \sum_{y \in Y} \sum_{x \in X}
 The learned network is visualized in Fig.\ref{fig:gs}. It is interesting to see that there are no direct dependencies between the explanatory variables. Even more the variable $V_s30$ is completely ignored. By comparing this result to work of~\citep{Vogel2014}which uses a similar data set( ;) ) one can find that this seems to be a consistent result when learning the structure of a Bayesian network for ground motion prediction from data. One causal reason might be that $V_s30$ is merely a proxy in quantifying the capability of the soil to amplify the amplitudes of seismic waves. One should keep in mind that the data was generated by the stochastic model of Boore~\citep{boore2003} and that a number of samples is not the full distribution.\\
 \begin{figure}[htbp]
 	\centering
-		\includegraphics[scale=0.5]{Figures/gs_one.png}
+		\includegraphics[scale=0.33]{Figures/gs_one.pdf}
 		\rule{35em}{0.5pt}
 	\caption[Contraint-based Grow-Shrink Network]{gs}
 	\label{fig:gs}
@@ -113,7 +114,7 @@ BIC = -2*ln L + k* ln(n)
 
 \begin{figure}[htbp]%
 	\centering
-		\includegraphics[scale=0.5]{Figures/hc_one.png}
+		\includegraphics[scale=0.33]{Figures/hc_one.pdf}
 		\rule{35em}{0.5pt}
 	\caption[Score-based Hill-Climber Network]{hc}
 	\label{fig:hc}

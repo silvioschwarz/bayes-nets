@@ -1,63 +1,66 @@
-# Loading data and initilization ####
-
-# Set working directory
-
-path = getwd()
-setwd(path)
+# initilization ####
 
 # Clear the memory 
 rm(list = ls())
+
+# Set working directory
+path = getwd()
+setwd(path)
 
 #style
 op = par()
 settings = options()
 par(pch = 19, ann = T, cex = 1)
 
-
-# load packages/install packages
-#TODO
-#install.packages("bnlearn")
-
-
-library(bnlearn)
-library(Rgraphviz)
-
 # read in additional functions
-source(".\\functions\\crossvalidation function.R")
+pathnames <- list.files(pattern="[.]R$", path=".\\functions", full.names=TRUE);
+sapply(pathnames, FUN=source);
+
+packages = c("bnlearn", "Rgraphviz")
+
+loadPackages(packages)
+
+# load and visualize data ####
 
 # read data
 data <- read.csv(file = "data.dat") 
 
-# visualize data ####
+# matrix plot of all variables
+
+cairo_pdf(file = "..\\Figures\\allvsall.pdf",
+          height = 9,
+          width = 16)
 
 plot(data, 
      main = "Scatterplot Matrix of all Variables", 
      col  = rgb(0, 0, 100, 50, maxColorValue = 255))
 
-#options(ylim = c(0, 1))
+Sys.sleep(600)
 
-par(mfrow=c(3,2))
-hist(data$SD)
-box()
-hist(data$Q0)
-box()
-hist(data$kappa)
-box()
-hist(data$Vs30)
-box()
-hist(data$MAG)
-box()
-hist(data$DIST)
-box()
+dev.off()
+#histograms
+#par(mfrow=c(3,2))
+#hist(data$SD)
+#box()
+#hist(data$Q0)
+#box()
+#hist(data$kappa)
+#box()
+#hist(data$Vs30)
+#box()
+#hist(data$MAG)
+#box()
+#hist(data$DIST)
+#box()
 
 
-par(op)
-options(settings)
-hist(data$PGA)
+#par(op)
+#options(settings)
+#hist(data$PGA)
 
-hist(data$PGA, c(min(data$PGA),-5.135, -3.722, -2.627, -1.20742, 0.145, 1.657, 3.175, max(data$PGA)))
+#hist(data$PGA, c(min(data$PGA),-5.135, -3.722, -2.627, -1.20742, 0.145, 1.657, 3.175, max(data$PGA)))
 
-# divide iinto learn and test data ####
+# divide into learn and test data ####
 
 # make copy of data
 data.disc = data
@@ -74,20 +77,12 @@ data.disc$PGA = as.factor(findInterval(data$PGA, c(-Inf, -5.135, -3.722, -2.627,
 # make folds
 set.seed(5555)
 
-liste = createFolds(data.disc, 10)
+k = 10 #number of folds
+index = sample(1:nrow(data))
+folds = split(index, 1:k)
 
-folds = liste$folds
-learning.liste = liste$learning
-test_disc.liste = liste$test
-test_cont.liste = vector("list", length(folds))
-for(i in 1:length(folds)){
-  test_cont.liste[[i]] = data[folds[[i]],]
-  
-}
-  
-rm(liste)
 
-#set up the nets ####
+# set up the nets ####
 
 PGA_causal = empty.graph(names(data))
 PGA_naive = empty.graph(names(data))
@@ -95,7 +90,9 @@ PGA_naive = empty.graph(names(data))
 # causal network
 arcs(PGA_causal) = matrix(c("SD","MAG","MAG","PGA", "DIST","PGA", "Vs30", "PGA", "kappa","Vs30", "Q0", "Vs30" ),ncol = 2, byrow = TRUE, 
                        dimnames = list(c(),c("from","to")))
+
 graphviz.plot(PGA_causal,layout = "neato",main = "Causal Network")
+
 
 # naive Bayes
 PGA_naive = naive.bayes(data.disc, "PGA",names(data.disc)[-7])
@@ -103,15 +100,16 @@ PGA_naive = naive.bayes(data.disc, "PGA",names(data.disc)[-7])
 graphviz.plot(PGA_naive,layout = "fdp",main = "Naive Bayes Network")
 
 
-#Learning and testing ####
+
+# Learning nets ####
 
 # allocate lists
 fit.causal = vector("list", length(folds))
 fit.naive = vector("list", length(folds))
 
 for(i in 1:length(folds)){
-  fit.causal[[i]] = bn.fit(PGA_causal, learning.liste[[i]], method = "bayes")
-  fit.naive[[i]] = bn.fit(PGA_naive, learning.liste[[i]], method = "bayes")
+  fit.causal[[i]] = bn.fit(PGA_causal, data.disc[-folds[[i]],], method = "bayes")
+  fit.naive[[i]] = bn.fit(PGA_naive, data.disc[-folds[[i]],], method = "bayes")
 }
 
 # Sturktur gelernt
@@ -124,30 +122,16 @@ fit.gs = vector("list", length(folds))
 
 for(i in 1:length(folds)){
   # Score based hill-climber
-  PGA_hc[[i]] = hc(learning.liste[[i]]) 
+  PGA_hc[[i]] = hc(data.disc[-folds[[i]],]) 
   
   # constraint based grow shrink 
-  PGA_gs[[i]] = gs(learning.liste[[i]]) 
+  PGA_gs[[i]] = gs(data.disc[-folds[[i]],]) 
   
   # Parameter lernen 
-  fit.hc[[i]] = bn.fit(PGA_hc[[i]], learning.liste[[i]])
-  fit.gs[[i]] = bn.fit(PGA_gs[[i]], learning.liste[[i]])
+  fit.hc[[i]] = bn.fit(PGA_hc[[i]], data.disc[-folds[[i]],])
+  fit.gs[[i]] = bn.fit(PGA_gs[[i]], data.disc[-folds[[i]],])
 }
 
-par(mfrow = c(5,2))
-par(mar = rep(2, 4))
-for(i in 1:length(folds)){
-  
-graphviz.plot(PGA_hc[[i]],layout = "dot", main = paste('Learned Structure, Fold: ',as.character(i)), sub = "Method: Hill-Climber")
-#readline(prompt = "")
-}
-
-for(i in 1:length(folds)){  
-graphviz.plot(PGA_gs[[i]],layout = "fdp",main = paste('Learned Structure, Fold: ',as.character(i)), sub = "Method: Grow-Shrink")
-#readline(prompt = "")
-}
-
-par(op)
 
 # Validation#### 
 
@@ -155,14 +139,14 @@ pga_interval = c(min(data$PGA), -5.135, -3.722, -2.627, -1.20742, 0.145, 1.657, 
 
 midpoints = 1:8
 for(i in 1:8){
-  midpoints[i] = mean(c(pga_interval[i],pga_interval[i+1]))
+  midpoints[i] = mean(c(pga_interval[i], pga_interval[i+1]))
 }
 
 
 net.list = list(fit.causal, fit.naive, fit.hc, fit.gs)
 
 numnets = length(net.list)
-numdata = nrow(test_disc.liste[[1]])
+numdata = nrow(data.disc[folds[[1]],])
 numpga = length(midpoints)
 numfolds = length(fit.causal)
 
@@ -174,45 +158,88 @@ prob = array(NA, c(numnets, numfolds,numdata))
 
 # out of sample test and cv error estimates
 total = numnets *numdata *numfolds
-pb = winProgressBar(title = "Progressbar",label = "Progressbar", min = 0, max = total, width = 300)
+pb = winProgressBar(title = "Progressbar",
+                    label = "Progressbar", 
+                    min = 0, 
+                    max = total, 
+                    width = 300)
 
 #net  = net, i = data fold = fold
-for(net in 1: numnets){
-  for(fold in 1:numfolds){
+for(fold in 1:numfolds){
+  for(net in 1: numnets){
     for(i in 1:numdata){
       
-      P = cpdist(net.list[[net]][[fold]], nodes="PGA", 
-                 evidence = (SD == test_disc.liste[[fold]]$SD[i] & 
-                               Q0 == test_disc.liste[[fold]]$Q0[i]  &
-                               kappa == test_disc.liste[[fold]]$kappa[i]  &
-                               Vs30 == test_disc.liste[[fold]]$Vs30[i]  &
-                               MAG == test_disc.liste[[fold]]$MAG[i]  &
-                               DIST == test_disc.liste[[fold]]$DIST[i]),
-                 n=5000*nparams(net.list[[net]][[fold]]))
+      testdata = data.disc[folds[[fold]],]
       
-      prob.array[net,fold, i,]   = prop.table(table(P))
+      P = cpdist(net.list[[net]][[fold]], nodes="PGA", 
+                 evidence = (SD == testdata$SD[i] & 
+                               Q0 == testdata$Q0[i]  &
+                               kappa == testdata$kappa[i]  &
+                               Vs30 == testdata$Vs30[i]  &
+                               MAG == testdata$MAG[i]  &
+                               DIST == testdata$DIST[i]),
+                 n = 5000*nparams(net.list[[net]][[fold]]))
+      
+      prob.array[net,fold, i,] = prop.table(table(P))
       
       weighted.mean = sum(midpoints *  prob.array[net,fold, i,] )
-      modal = max(midpoints[which(max(prob.array[net, fold, i,] )== prob.array[net,fold, i,] )]) # if several modals pick PGA highest
+      modal = max(midpoints[which(max(prob.array[net, fold, i,] ) == prob.array[net,fold, i,])]) # if several modals pick PGA highest
       mediann = midpoints[min(which(cumsum( prob.array[net, fold,i,] ) >= 0.5))]
       
       
       point.est[[net, fold,i,1]] = weighted.mean
       point.est[[net,fold,i,2]] = modal
       point.est[[net,fold,i,3]] = mediann
+      prob[[net,fold,i]] =  prob.array[net, fold, i, testdata$PGA[i]]
       
-      error[[net,fold,i,1]] = (weighted.mean - test_cont.liste[[fold]]$PGA[i])^2
-      error[[net,fold,i,2]] = (modal - test_cont.liste[[fold]]$PGA[i])^2
-      error[[net,fold,i,3]] = (mediann - test_cont.liste[[fold]]$PGA[i])^2
       
-      prob[[net,fold,i]] =  prob.array[net,fold,i,test_disc.liste[[fold]]$PGA[i]]
-      
-      setWinProgressBar(pb, (net-1)*numfolds*numdata+(fold-1)*numdata+i , title = paste(round(((net-1)*numfolds*numdata+(fold-1)*numdata+i )/total*100, digits = 3), "% done"), label ="Progressbar")
+     
+     percantage = (net-1)*numfolds*numdata+(fold-1)*numdata+i
+     
+    setWinProgressBar(pb,
+                      percantage, 
+                      title = paste(round((percentage/total*100, digits = 3), "% done"), 
+                                    label ="Progressbar")
     }
+    
   }
+  testdata_cont = data[folds[[fold]],]$PGA
+  
+  testarray = array(rep(testdata_cont, numnets*3), c(numnets,numdata,3))
+  
+  error[[,fold,,]] = (point.est[[,fold,,]] - testarray)^2
 }
 
+load("cv.RData")
+# Errors
+# validation set
+validationError = error[,1,,] #only use first fold
+meanErrors = apply(validationError, c(1,3), mean) # mean across dimension 2 (data)
+
+prob[which(prob ==0)] = NA
+probability = rowMeans(log(prob), na.rm = T)
+
+results = cbind(meanErrors, probability)
+colnames(results) = c("mean","mode","median","probability")
+results
+
+# cv
+
+meanErrorsCv = apply(error, c(1,4), mean) # mean across dimensions 2,3 (folds, data)
+
+# exclude probability = 0 since log(0) = not defined
+prob[which(prob == 0)] = NA 
+probability =  rowMeans(log(prob), na.rm = T) 
+
+resultsCV = cbind(meanErrorsCv, probability)
+colnames(resultsCV) = c("mean","mode","median","probability")
+resultsCV
+
+# EXPERIMENTAL ####
+
 # BUild avarage models across the folds
+# This is really nasty but couldn't figure out a way to do this more elegantly
+# avaraging across the parameters and combining them to a new BN object...
 net.avg = list(1,2,3,4)
 
 for(net in 1:numnets){
@@ -225,7 +252,7 @@ for(net in 1:numnets){
   dist = net.list[[net]][[1]]$DIST
   m = net.list[[net]][[1]]$MAG
   
-  if(net == 3) m = net.list[[net]][[2]]$MAG # first net of gs has different structure
+  if(net == 3) m = net.list[[net]][[2]]$MAG # first net of hc has different structure
 
   
   
@@ -256,7 +283,12 @@ for(net in 1:numnets){
 }
 
 # make predictions
-nets.list = list(c(net.list[[1]], net.avg[1]),c(net.list[[2]], net.avg[2]),c(net.list[[3]], net.avg[3]),c(net.list[[4]], net.avg[4]))
+# append the average model to each BN class = 4*(10 folds + 1 average model)
+# average model is the "11th fold"
+nets.list = list(c(net.list[[1]], net.avg[1]),
+                 c(net.list[[2]], net.avg[2]),
+                 c(net.list[[3]], net.avg[3]),
+                 c(net.list[[4]], net.avg[4]))
 
 
 pga_interval = c(min(data$PGA), -5.135, -3.722, -2.627, -1.20742, 0.145, 1.657, 3.175, max(data$PGA))
@@ -267,7 +299,7 @@ for(i in 1:8){
 }
 
 
-
+#initialize arrays to hold results
 numnets = length(nets.list)
 numdata = nrow(data.disc)
 numpga = length(midpoints)
@@ -279,13 +311,17 @@ point.est_bv = array(NA,  c(numnets,numfolds, numdata, 3))
 error_bv = array(NA, c(numnets,numfolds, numdata, 3))
 prob_bv = array(NA, c(numnets, numfolds,numdata))
 
-# out of sample test and cv error estimates
+# set loading bar...
 total = numnets *numdata *numfolds
-pb = winProgressBar(title = "Progressbar",label = "Progressbar", min = 0, max = total, width = 300)
+pb = winProgressBar(title = "Progressbar",
+                    label = "Progressbar", 
+                    min = 0, 
+                    max = total, 
+                    width = 300)
 
-# i = data net = net type
-for(net in 1: length(nets.list)){
-  for(fold in 1: length(nets.list[[net]])){
+# i = data net = net type fold = fold
+for(fold in 1: length(nets.list[[net]])){
+  for(net in 1: length(nets.list)){
     for(i in 1:nrow(data.disc)){
       
       P = cpdist(nets.list[[net]][[fold]], nodes="PGA", 
@@ -297,9 +333,10 @@ for(net in 1: length(nets.list)){
                                DIST == data.disc$DIST[i]),
                  n=5000*nparams(nets.list[[net]][[fold]]))
       
-      prob.array_bv[net, fold,i,]   = prop.table(table(P))
-      weighted.mean = sum(midpoints *prob.array_bv[net, fold,i,])
-      modal = max(midpoints[which(max(prob.array_bv[net, fold,i,])==prob.array_bv[net, fold,i,])]) # if several modals pick PGA highest
+      prob.array_bv[net, fold,i,] = prop.table(table(P))
+      weighted.mean = sum(midpoints * prob.array_bv[net, fold,i,])
+      modal = max(midpoints[which(max(prob.array_bv[net, fold,i,])==
+                                    prob.array_bv[net, fold,i,])]) # if several modals pick PGA highest
       mediann = midpoints[min(which(cumsum(prob.array_bv[net, fold,i,]) >= 0.5))]
       
       
@@ -312,100 +349,147 @@ for(net in 1: length(nets.list)){
       error_bv[[net, fold,i,3]] = (mediann - data$PGA[i])^2
       
       
-      
       prob_bv[[net, fold, i]] = prob.array_bv[net, fold,i,data.disc$PGA[i]]
       
-      setWinProgressBar(pb, (net-1)*numfolds*numdata+(fold-1)*numdata+i  , title = paste(round(((net-1)*numfolds*numdata+(fold-1)*numdata+i )/total*100, digits = 3), "% done"), label ="Progressbar")
-      
+      percentage = (net - 1) * numfolds * numdata + (fold - 1) * numdata + i
+      setWinProgressBar(pb, percentage,
+                        title = paste(round((percentage/total*100, digits = 3), "% done"), 
+                                      label = "Progressbar")
     }
-    
   }
 }
 
-
-
-# make predictions
-numnets = length(net.avg)
-prob.array_bvavg = array(NA, c(numnets, nrow(data), numpga))
-
-point.est_bvavg = array(NA,  c(numnets, nrow(data), 3))
-error_bvavg = array(NA, c(numnets, nrow(data), 3))
-prob_bvavg = array(NA, c(numnets, nrow(data)))
-
-total = numnets *nrow(data)
-pb = winProgressBar(title = "Progressbar",label = "Progressbar", min = 0, max = total, width = 300)
-
-# i = data net = net type
-for(net in 1: length(net.avg)){
-  for(i in 1:nrow(data.disc)){
-    
-    P = cpdist(net.list[[net]], nodes="PGA", 
-               evidence = (SD == data.disc$SD[i] & 
-                             Q0 == data.disc$Q0[i]  &
-                             kappa == data.disc$kappa[i]  &
-                             Vs30 == data.disc$Vs30[i]  &
-                             MAG == data.disc$MAG[i]  &
-                             DIST == data.disc$DIST[i]),
-               n=5000*nparams(net.list[[net]]))
-    
-    prob.array_bvavg[net,i,]   = prop.table(table(P))
-    weighted.mean = sum(midpoints *prob.array_bvavg[net,i,])
-    modal = max(midpoints[which(max(prob.array_bvavg[net,i,])==prob.array_bvavg[net,i,])]) # if several modals pick PGA highest
-    mediann = midpoints[min(which(cumsum(prob.array_bvavg[net,i,]) >= 0.5))]
-    
-    
-    point.est_bvavg[[net,i,1]] = weighted.mean
-    point.est_bvavg[[net,i,2]] = modal
-    point.est_bvavg[[net,i,3]] = mediann
-    
-    error_bvavg[[net,i,1]] = (weighted.mean - data$PGA[i])^2
-    error_bvavg[[net,i,2]] = (modal - data$PGA[i])^2
-    error_bvavg[[net,i,3]] = (mediann - data$PGA[i])^2
-    
-    
-    
-    prob_bvavg[[net, i]] = prob.array_bvavg[net, fold,i,data.disc$PGA[i]]
-    
-    setWinProgressBar(pb, (net-1)+(fold-1)*numdata+i , title = paste(round(((net-1)+(fold-1)*numdata+i)/total*100, digits = 3), "% done"), label ="Progressbar")
-    
-  }
-  
-}
-
-# Errors####
-# minimum
-weighted.mean = rowMeans(error[,,1])
-modal = rowMeans(error[,,2])
-medi = rowMeans(error[,,3])
-
-result = apply(error, c(1,3), mean)
-
-prob[which(prob ==0)] = NA
-probability = rowMeans(log(prob), na.rm = T)
-
-results = cbind(weighted.mean, modal, medi, probability)
-
-# cv
-
-quaderr = apply(error, c(1,4), mean)
-
-prob[which(prob ==0)] = NA
-probability =  rowMeans(log(prob), na.rm = T)
-
-results = cbind(quaderr, probability)
 
 # bv
-foldmeans = apply(error, c(1,2,4), mean)
-foldsd = apply(foldmeans, c(1,3), sd)
+load("bv.RData")
+# bias = mean error of average model
+#variance = mean error between other models and avereage
+
+observedPGA = array(rep(data$PGA, 12, each = 4), c(numnets, numdata, 3))
+biasError = (point.est_bv[,11,,] - observedPGA)^2
+
+hist(biasError[1,,1])
+
+bias = apply(biasError, c(1,3), mean)
+colnames(bias) = c("mean","mode", "median")
+bias
 
 
-prob[which(prob==0)]=NA
-foldprobmean = apply(prob, c(1,2), mean, na.rm = T)
-foldprobsd = apply(foldprobmean, c(1), sd)
+varianceError = array(NA, c(numnets, 10, numdata, 3))
+for(i in 1:10){
+  varianceError[,i,,]= (point.est_bv[,i,,] - point.est_bv[,11,,])^2
+}
 
-probability = rowMeans(log(prob), na.rm = T)
+variance = apply(varianceError, c(1,4), mean)
+colnames(variance) = c("mean","mode", "median")
+variance
 
-results = cbind(weighted.mean, modal, medi, probability)
+# Graphics for Export####
+
+#allvsall
+
+cairo_pdf(file = "..\\Figures\\allvsall.pdf",
+          height = 9,
+          width = 16)
+
+plot(data, 
+     main = "Scatterplot Matrix of all Variables", 
+     col  = rgb(0, 0, 100, 50, maxColorValue = 255))
+
+Sys.sleep(60)
+
+dev.off()
+
+# causal network
+arcs(PGA_causal) = matrix(c("SD","MAG","MAG","PGA", "DIST","PGA", "Vs30", "PGA", "kappa","Vs30", "Q0", "Vs30" ),ncol = 2, byrow = TRUE, 
+                          dimnames = list(c(),c("from","to")))
+
+cairo_pdf(file = "..\\Figures\\causal.pdf",
+          height = 9,
+          width = 16)
+graphviz.plot(PGA_causal,layout = "neato",main = "Causal Network")
+dev.off()
+
+# naive Bayes
+PGA_naive = naive.bayes(data.disc, "PGA",names(data.disc)[-7])
+
+cairo_pdf(file = "..\\Figures\\naive.pdf",
+          height = 9,
+          width = 16)
+graphviz.plot(PGA_naive,layout = "fdp",main = "Naive Bayes Network")
+dev.off()
+
+
+# learned structure networks
+
+x1 = list()
+x2 = list()
+
+for(i in 1:length(folds)){
+  x1[i] = graphviz.plot(PGA_hc[[i]], layout = "circo")
+  x2[i] = graphviz.plot(PGA_gs[[i]])  
+}
+
+# hill-climber single
+cairo_pdf(file = "..\\Figures\\hc.pdf",
+          height = 9,
+          width = 16)
+
+par(mfrow = c(5,2))
+par(mar = rep(1, 4))
+for(i in 1:length(folds)){
+  
+  x = layoutGraph(x1[[i]], nodeAttrs = list(width = 25))
+  nodeRenderInfo(x) = list(fontsize = 12)
+  graph.par(list(graph = list(main = paste("Fold: ",as.character(i)), 
+                              cex.main = 2)))
+  renderGraph(x)
+}
+dev.off()
+
+#grow-shrink single
+cairo_pdf(file = "..\\Figures\\gs.pdf",
+          height = 9,
+          width = 16)
+
+par(mfrow = c(5,2))
+par(mar = rep(1, 4))
+
+for(i in 1:length(folds)){  
+  x = layoutGraph(x2[[i]], nodeAttrs = list(width = 20))
+  nodeRenderInfo(x) = list(fontsize = 12)
+  graph.par(list(graph = list(main = paste("Fold: ",as.character(i)), 
+                              cex.main = 2)))
+  renderGraph(x)
+}
+dev.off()
+
+# 
+cairo_pdf(file = "..\\Figures\\hc_one.pdf",
+          height = 9,
+          width = 16)
+
+x = layoutGraph(x1[[1]], nodeAttrs = list(width = 25))
+nodeRenderInfo(x) = list(fontsize = 12)
+graph.par(list(graph = list(main = "Learned Structure", sub = "Method: Hill-Climber"), 
+               cex.main = 2,  cex.sub = 2))
+renderGraph(x)
+
+dev.off()
+
+
+cairo_pdf(file = "..\\Figures\\gs_one.pdf",
+          height = 9,
+          width = 16)
+
+
+x = layoutGraph(x2[[1]], nodeAttrs = list(width = 20))
+nodeRenderInfo(x) = list(fontsize = 12)
+graph.par(list(graph = list(main = "Learned Structure", sub = "Method: Grow-Shrink"), 
+               cex.main = 2, cex.sub = 2))
+renderGraph(x)
+
+dev.off()
 
 # Animation####
 
