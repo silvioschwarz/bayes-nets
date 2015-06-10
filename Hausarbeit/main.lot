@@ -1,6 +1,6 @@
-\contentsline {table}{\numberline {1}{\ignorespaces Variables and distributions}}{3}{table.caption.10}
-\contentsline {table}{\numberline {2}{\ignorespaces Discretization of the Variables}}{9}{table.caption.21}
-\contentsline {table}{\numberline {3}{\ignorespaces Validation Error}}{11}{table.caption.24}
-\contentsline {table}{\numberline {4}{\ignorespaces Crossvalidation Error}}{11}{table.caption.26}
-\contentsline {table}{\numberline {5}{\ignorespaces Bias}}{12}{table.caption.28}
-\contentsline {table}{\numberline {6}{\ignorespaces Variance}}{12}{table.caption.29}
+\contentsline {table}{\numberline {1}{\ignorespaces Variables and Distributions}}{3}{table.caption.10}
+\contentsline {table}{\numberline {2}{\ignorespaces Discretization of the Variables}}{4}{table.caption.11}
+\contentsline {table}{\numberline {3}{\ignorespaces Validation Error}}{12}{table.caption.29}
+\contentsline {table}{\numberline {4}{\ignorespaces Cross-validation Error}}{14}{table.caption.31}
+\contentsline {table}{\numberline {5}{\ignorespaces Bias}}{16}{table.caption.35}
+\contentsline {table}{\numberline {6}{\ignorespaces Variance}}{16}{table.caption.36}

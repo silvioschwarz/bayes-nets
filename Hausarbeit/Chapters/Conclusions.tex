@@ -4,18 +4,16 @@
 
 \label{Chapter4} % For referencing the chapter elsewhere, use \ref{Chapter1} 
 
-\lhead{Chapter 1. \emph{Introduction}} % This is for the header on each page - perhaps a shortened title
-kausales netz
+\lhead{Chapter 4. \emph{Conclusions}} % This is for the header on each page - perhaps a shortened title
 
-naives netzt
-gelerntes netz
+Four different Bayesian Networks have been learned from synthetic data in an attempt to answer questions related to natural hazard assessment. These computations where complemented by using different metrics to derive point estimates from a distribution and different methodologies to estimate the out-of-sample performance of the models.\\\\
+The best results throughout all tests where accomplished by networks which learned their structure from the data. They do not include $V_S30$ which is surprising but consistent with findings by~\cite{Vogel2014}.\\ 
+It was shown that the mean is a better point estimator than the mode or median of a distribution, at least when considering a larger number of predictions.\\
+The complexity of the causal network seems unjustified, considering the prediction performance, although the cause may lie more on the side of a bad reasoning process.\\
+For a scenario where quick decisions have to be made by relying on the outcomes of a Bayesian Network the Naive Bayes network has the advantage of a very low computation duration\footnote{Although I am a bit shocked how long it took for the computations to be done. Right now, I can't imagine this being used in the framework of an early warning system, for example. And I am sure Carsten showed me something that was much more responsive concerning Tsunami.} and it has the benefit of not needing any expert judgment\footnote{and years of committees and meetings. But actually that's not really encouraging from a Bayesian point of view. Assuming everything is independent and not using expert knowledge...} while still performing quite well.\\
+It also should be noted that some of the errors are due to the discretization and not using continuous Bayesian Networks. It would be interesting performing similar computations with different degrees of interval size to see what influence this feature has.\\
+Another desirable feature for the future would be some kind of absolute error metric. Right now, it is only possible to compare models to each other but the number alone does not tell so much.\\\\
 
-vgl causal naiv hinsichtlich komplexität und einshcätzung der vorhersagefähigkeit
-vgl gelerntes mit kausal und ursachen für unterschiede erklären
-
-vgl vorhersagegenauigkeit, begründng punktschätzer
-welches modell für gewährungsanalyse
-
-warum hab ich was wie gemaht???
-
-unterschiede können auf diskretisierung zurück gehen
+DISCLAIMER:\\
+All the code, graphics, images, this document and most of the used references can be found in my personal repository under:\\
+\href{https://github.com/silvioschwarz/bayes-nets}{https://github.com/silvioschwarz/bayes-nets}.\\ It is not as clean and self explaining as some repos of big engineering companies but I think it will do the trick

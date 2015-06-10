@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/W32TeX) (preloaded format=pdflatex 2014.11.12)  7 JUN 2015 20:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/W32TeX) (preloaded format=pdflatex 2014.11.12)  10 JUN 2015 22:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -679,35 +679,32 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count133
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 34.
- (./main.aux
-
-LaTeX Warning: Label `tab:2' multiply defined.
-
-)
+Package hyperref Info: Option `colorlinks' set `true' on input line 35.
+ (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: longtable package is loaded.
- (c:/texlive/2014/texmf-dist/tex/latex/caption/ltcaption.sty
+
+(c:/texlive/2014/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2013/02/03 v1.3-62 longtable captions (AR)
 )
 Package caption Info: rotating package is loaded.
@@ -737,7 +734,7 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 137.
 )
-Package hyperref Info: Link coloring ON on input line 40.
+Package hyperref Info: Link coloring ON on input line 41.
 
 (c:/texlive/2014/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -747,9 +744,9 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count141
 )
-LaTeX Info: Redefining \ref on input line 40.
-LaTeX Info: Redefining \pageref on input line 40.
-LaTeX Info: Redefining \nameref on input line 40.
+LaTeX Info: Redefining \ref on input line 41.
+LaTeX Info: Redefining \pageref on input line 41.
+LaTeX Info: Redefining \nameref on input line 41.
 
 (./main.out) (./main.out)
 \@outlinefile=\write3
@@ -805,7 +802,12 @@ Chapter 1.
 ------------------------------------------------------------------------------
  1 Introduction
 ------------------------------------------------------------------------------
-) (./Chapters/Learning.tex [1
+) (./Chapters/Learning.tex
+Underfull \hbox (badness 10000) in paragraph at lines 8--2
+
+ []
+
+[1
 
 
 
@@ -816,126 +818,147 @@ Chapter 2.
 ------------------------------------------------------------------------------
 [2
 
-] [3] <Figures/naive.pdf, id=166, 1156.32pt x 650.43pt>
+] [3] <Figures/naive.pdf, id=187, 1156.32pt x 650.43pt>
 File: Figures/naive.pdf Graphic file (type pdf)
 
 <use Figures/naive.pdf>
-Package pdftex.def Info: Figures/naive.pdf used on input line 56.
+Package pdftex.def Info: Figures/naive.pdf used on input line 78.
 (pdftex.def)             Requested size: 381.58678pt x 214.64256pt.
- [4 <./Figures/naive.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 63--64
+ [4]
+Underfull \hbox (badness 10000) in paragraph at lines 88--89
 
  []
 
-<Figures/causal.pdf, id=183, 1156.32pt x 650.43pt>
+<Figures/causal.pdf, id=195, 1156.32pt x 650.43pt>
 File: Figures/causal.pdf Graphic file (type pdf)
  <use Figures/causal.pdf>
-Package pdftex.def Info: Figures/causal.pdf used on input line 67.
+Package pdftex.def Info: Figures/causal.pdf used on input line 92.
 (pdftex.def)             Requested size: 381.58678pt x 214.64256pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--75
+Underfull \hbox (badness 10000) in paragraph at lines 98--101
 
  []
 
-[5 <./Figures/causal.pdf>] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 87--89
+[5 <./Figures/naive.pdf> <./Figures/causal.pdf
+
+pdfTeX warning: pdflatex.exe (file ./Figures/causal.pdf): PDF inclusion: multip
+le pdfs with page group included in a single page
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 104--105
 
  []
 
-<Figures/gs_one.pdf, id=225, 1156.32pt x 650.43pt>
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 116--118
+
+ []
+
+<Figures/gs_one.pdf, id=247, 1156.32pt x 650.43pt>
 File: Figures/gs_one.pdf Graphic file (type pdf)
  <use Figures/gs_one.pdf>
-Package pdftex.def Info: Figures/gs_one.pdf used on input line 92.
+Package pdftex.def Info: Figures/gs_one.pdf used on input line 121.
 (pdftex.def)             Requested size: 381.58678pt x 214.64256pt.
 
-[7 <./Figures/gs_one.pdf>] <Figures/hc_one.pdf, id=249, 1156.32pt x 650.43pt>
+[7] <Figures/hc_one.pdf, id=263, 1156.32pt x 650.43pt>
 File: Figures/hc_one.pdf Graphic file (type pdf)
 
 <use Figures/hc_one.pdf>
-Package pdftex.def Info: Figures/hc_one.pdf used on input line 114.
+Package pdftex.def Info: Figures/hc_one.pdf used on input line 145.
 (pdftex.def)             Requested size: 381.58678pt x 214.64256pt.
- [8 <./Figures/hc_one.pdf>]) (./Chapters/Testing.tex
-[9]
+ [8 <./Figures/gs_one.pdf>] [9 <./Figures/hc_one.pdf>]) (./Chapters/Testing.tex
+ [10]
 Chapter 3.
 ------------------------------------------------------------------------------
- 3 Testing
+ 3 Testing Bayesian Networks
 ------------------------------------------------------------------------------
 
-Underfull \hbox (badness 10000) in paragraph at lines 9--12
+Underfull \hbox (badness 10000) in paragraph at lines 9--13
 
  []
 
-[10
+[11
 
-]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
+] [12]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./Chapters/Conclusions.tex [11] [12]
+[13] [14]
+Underfull \hbox (badness 10000) in paragraph at lines 107--111
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 107--111
+
+ []
+
+[15]) (./Chapters/Conclusions.tex [16]
 Chapter 4.
 ------------------------------------------------------------------------------
  4 Conclusions
 ------------------------------------------------------------------------------
 
-Overfull \hbox (11.8283pt too wide) in paragraph at lines 16--18
-[]\OT1/cmr/m/n/10.95 vgl vorher-sage-ge-nauigkeit, begr^^?undng punk-tsch^^?atz
-er welches mod-ell f^^?ur gew^^?ahrungsanalyse 
+Underfull \hbox (badness 10000) in paragraph at lines 9--16
+
  []
 
-) (./Appendices/AppendixA.tex [13
 
-]
+Underfull \hbox (badness 10000) in paragraph at lines 9--16
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--16
+
+ []
+
+[17
+
+]) (./Appendices/AppendixA.tex [18]
 Appendix A.
 ------------------------------------------------------------------------------
  A Additional Figures
 ------------------------------------------------------------------------------
-[14
+[19
 
-] <Figures/hc.pdf, id=301, 1156.32pt x 650.43pt>
+] <Figures/hc.pdf, id=368, 1156.32pt x 650.43pt>
 File: Figures/hc.pdf Graphic file (type pdf)
  <use Figures/hc.pdf>
 Package pdftex.def Info: Figures/hc.pdf used on input line 12.
 (pdftex.def)             Requested size: 1156.31718pt x 650.4284pt.
 
-[15 <./Figures/hc.pdf>] <Figures/gs.pdf, id=317, 1156.32pt x 650.43pt>
+[20 <./Figures/hc.pdf>] <Figures/gs.pdf, id=383, 1156.32pt x 650.43pt>
 File: Figures/gs.pdf Graphic file (type pdf)
 
 <use Figures/gs.pdf>
 Package pdftex.def Info: Figures/gs.pdf used on input line 25.
 (pdftex.def)             Requested size: 1156.31718pt x 650.4284pt.
-) [16 <./Figures/gs.pdf>]
+) [21 <./Figures/gs.pdf>]
 ------------------------------------------------------------------------------
  References
 ------------------------------------------------------------------------------
 (./main.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 203.
- [17
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 204.
+ [22
 
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 203.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 204.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 203.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 203.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 204.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 204.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 87810649FED24E2854DDF68F5CEBC50A;2547.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 203.
+(rerunfilecheck)             Checksum: 29ED685DD362831EB77FE90E50F091DD;3668.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 204.
  ) 
 Here is how much of TeX's memory you used:
- 13224 strings out of 493109
- 184879 string characters out of 6138586
- 262457 words of memory out of 5000000
- 16416 multiletter control sequences out of 15000+600000
- 15204 words of font info for 58 fonts, out of 8000000 for 9000
+ 13247 strings out of 493109
+ 185193 string characters out of 6138586
+ 262754 words of memory out of 5000000
+ 16425 multiletter control sequences out of 15000+600000
+ 15511 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 49i,13n,45p,1684b,391s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 49i,16n,45p,1795b,391s stack positions out of 5000i,500n,10000p,200000b,80000s
 <c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/tex
 live/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2014
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2014/texmf-d
@@ -950,11 +973,12 @@ st/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2014/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmsy10.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmsy6.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.p
-fb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on main.pdf (21 pages, 354187 bytes).
+fb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><c:/te
+xlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (26 pages, 381938 bytes).
 PDF statistics:
- 409 PDF objects out of 1000 (max. 8388607)
- 347 compressed objects within 4 object streams
- 69 named destinations out of 1000 (max. 500000)
- 159 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 483 PDF objects out of 1000 (max. 8388607)
+ 414 compressed objects within 5 object streams
+ 83 named destinations out of 1000 (max. 500000)
+ 191 words of extra memory for PDF output out of 10000 (max. 10000000)
 

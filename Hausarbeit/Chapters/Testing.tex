@@ -1,92 +1,146 @@
 % Chapter 1
 
-\chapter{Testing} % Main chapter title
+\chapter{Testing Bayesian Networks} % Main chapter title
 
 \label{Chapter3} % For referencing the chapter elsewhere, use \ref{Chapter1} 
 
-\lhead{Chapter 3. \emph{Testing}} % This is for the header on each page - perhaps a shortened title
+\lhead{Chapter 3. \emph{Testing Bayesian Networks}} % This is for the header on each page - perhaps a shortened title
 
-Testing the outcomes of a model is an integral part of the modeling since it gives an estimate on the expected performance in future scenarios. For doing so, many different measures and methodologies have been developed, all targeting a different part of the question what a "good" model should be. There are measures like the mean squared error that quantify the difference between the observed data points and the values predicted from the model. These can be thought of as in-sample error metrics because the data to construct the model is also used to estimate the error. Intuitively, this seems like a good idea because it gives an easy to use metric that establishes an link between the model and the reality. But focusing too much on getting a low in-sample-error can cause a phenomenon called "overfitting" where the model is so much adjusted to the present data that it performs poorly on unseen data. This can even lead to the conviction that some of the data has to be excluded because the worsen the fit.\\
-This is the difference between function approximation and learning a model. In function approximation the goal is to estimate the parameters of a model so that the final function matches the given data the closest. In learning a model the underlying dependencies are usually not known and the data only represent a subset of the whole range of possible values, often including some noise. Hence, the task in learning a model is to match the model complexity to the data resources~\citep{LearningFromData}. Particular in a scenario of estimating natural hazard it would be desirable to have a measure that can quantify the model's ability for forecasting.\\\\
-In the scope of this paper the mode, median and mean are used asq point estimates and the mean squared error is computed. Additionally, the log-likelihood of the observed PGA values.
+Testing the outcomes of a model is an integral part of the modeling since it gives an estimate on the expected performance in future scenarios. It is also a requirement for scientific work to provide some sense how well the reality has been captured and to provide a way to falsify one's findings.\\
+For doing so, many different metrics and methodologies have been developed, all targeting a different part of the question what a "good" model should be. There are measures like the mean squared error that quantify the difference between the observed data and the values predicted from the model. These can be thought of as an in-sample  metric because the data to construct the model is also used to estimate the error. Intuitively, this seems appropriate because it gives an easy to use measure that establishes a link between the model and reality. But focusing too much on getting a low in-sample-error can cause a phenomenon called "overfitting", where the model is so much adjusted to the data at hand, it fails to do well on unseen data. This can even lead to the conviction that some of the data has to be excluded because the fit is worsened.\\
+Here lies the difference between function approximation and learning a model. In function approximation the goal is to estimate the parameters of a known model so that the final function matches the given data the closest. In learning a model the underlying relationship is usually not or not fully known and the data only represent a subset of the whole range of possible values, often including some noise. Hence, the task in learning a model is to match the model complexity to the data resources~\citep{LearningFromData}. Particular in a scenario of estimating natural hazard it would be desirable to have a measure that can quantify the model's ability for forecasting\footnote{Here I switch from predicting to forecasting because predicting seems to have more of a meaning of a wise oracle that knows something for sure in mysterious ways inaccessible to mortal beings. Forecasting, like weather forecasting, captures more the notion of dealing with uncertainty and deciding under uncertainty}.\\\\
+In the scope of this paper the mode, median and mean are used as point estimates and consequently the mean squared error is computed. Additionally, the log-likelihood given by the model to the observed PGA values is used. These metrics are employed into different methodologies starting from a simple validation case over to cross-validation and to an attempt of a bias-variance decomposition. This captures a process from getting a simple handle on the out-of-sample performance over to more sophisticated methods that reveal insights into the prediction ability of the model.
 
 %----------------------------------------------------------------------------------------
 
 \section{Validation}
-One common approach to get a handle of a models' prediction performance is to divide the data into a learning set and a validation set. Then the learning data is used to estimate the parameters and the models performance is tested on the test set. This has the effect of simulating unseen data since the test data has not been used for learning the models parameters.
+One common approach to get an estimate of a models' prediction performance is to divide the data into a learning set and a validation set. Then the learning data is used to estimate the parameters and the performance is tested on the validation set. This has the effect of simulating unseen data since the validation data has not been used for learning the models parameters.\\
+The data has been randomly divided into learning and validation data with 90\% of the data going into the learning set and 10\% are kept for validation. Table~\ref{tab:validation} shows the results of this analysis. 
 
 \begin{table}[h]
+\caption[Validation Error]{Errors on the validation set calculated for the different nets and error measures. Mean, median and mode are the mean squared errors between the mean, median and mode of the resulting PGA distribution and the "observed values" in the data set. Probability is the sum over the logarithm of the probability that was predicted for the "observed" values of PGA in the validation data.}
 \centering
 \begin{tabular}{ l l l l l  }
  \hline
-  & \multicolumn{4}{c}{error measure} \\
+  & \multicolumn{4}{c}{error metric} \\
  \hline
  net & mean & median & mode & probability\\
  \hline
- causal   & 4.816    & 4.933  & 9.739   &-1.772\\
- naive   & 1.488      & 1.801 & 1.937  &-1.35\\
- hill-climber   & 1.068      & 1.339 & 1.503  &-1.016\\
- grow-shrink   & 0.844     & 1.124  & 1.149 &-0.874\\
+ Causal   & 4.816    & 4.933  & 9.739   &-1.772\\
+ Naive Bayes   & 1.488      & 1.801 & 1.937  &-1.35\\
+ Hill-Climber   & 1.068      & 1.339 & 1.503  &-1.016\\
+ Grow-Shrink   & 0.844     & 1.124  & 1.149 &-0.874\\
 \end{tabular}
-\caption[Validation Error]{error measures}
-\label{tab:2}
+\label{tab:validation}
 \end{table}
+
+For all networks, using the mean as a point estimator yields the lowest errors. This might seem counter-intuitive because the mode of a distribution is by definition the value with the highest probability. But over the long run the mean is the value that establishes the best balance between values with high probabilities and those in the tails of the distribution. Taking a game of gambling as analogy, the mean is the "fair price" with which one would neither lose nor win any money in the long run.\\
+Considering the different ways the structures of the networks have been chosen the causal net show the worst performance which might have to do with the fact that it was not properly thought through. The Naive Bayes network has quite a good performance given the fact that it neglects any dependency between the explanatory variables. The best predictions come from the networks which have learned their structure from the data. One might be a bit puzzled because these networks do not seem to show much of the dependencies one would think of considering the earthquake process but, again, the task is not to come up with a model that causally explains how the different variables interact but to find a model that, given the data resources, best would have generated the data. These two approaches, modeling nature by observing cause and effect and focusing on a good prediction performance, should complement and at some point come very close to each other. But they do not have to be the same  and it is a bit of a religious argument what "real" science ought to be.
 %----------------------------------------------------------------------------------------
 
-\section{Crossvalidation}
-Dividing the available data into a learning and a validation set make the compromise to spend a certain portion of the data to validation and to not use this data in the estimation of the models parameters. One has to find a balance between not setting aside too much data for the validation and consequently learning a poor model from few data points and not using enough data for validation so that the estimated future performance is not well defined. The method of crossvalidation addresses this dilemma by not learning one model and testing on one data set but performing this procedure several times and average the results. Therefore, the data is divided into so called folds.
+\section{Cross-validation}
+Dividing the available data into a learning and a validation set makes the compromise to spend a certain portion of the data for validation and to not use this data in the estimation of the model's parameters. One has to find a balance between not setting aside too much data for the validation and consequently learning a poor model from fewer data points and not using enough data for validation so that the estimated future performance is not well defined. The method of cross-validation addresses this dilemma by not learning a single model and testing on one validation set but performing this procedure several times and average the results. Therefore, the data is divided into so called folds. In the course of this assignment the data has been randomly divided into ten folds which are subsets of the data that together span the whole range of the data. Consequently, nine of these ten folds have been used to learn the model and one was left for validation. Since there are ten folds this procedure can be repeated nine times, each time with another fold for validation and the rest for learning. This means that for each network type ten different networks have been learned and tested on a different data set. One can think of cross-validation similar to bootstrapping but without using a data point over again. This is the same as the procedure in the Validation section because any other combination of learning and validation data set would have been possible. So without changing anything, ten times the amount of models have been learned and validated. For the Grow-Shrink and Hill-Climber networks this means learning ten structure which possibly could be different (see Appendices~\ref{AppendixA1} and \ref{AppendixA2}).\\
+The resulting errors are then the averages of the mean squared errors or log-likelihood for each network type. This is like learning from ten times more data with the restriction that the data is not really independent from each other because the learning data sets overlap. Cross-validation originally comes from model selection where one trains models and varies one parameter in order to determine the best choice for that parameter.
 
 \begin{table}[h]
+\caption[Cross-validation Error]{Average errors on the folds using the cross-validation method. Errors are calculated for the different nets and error measures. Mean, median and mode are the mean squared errors between the mean, median and mode of the resulting PGA distribution and the "observed values" in the data set. Probability is the sum over the logarithm of the probability that was predicted for the "observed" values of PGA in the validation data.}
 \centering
 \begin{tabular}{ l l l l l  }
  \hline
-  & \multicolumn{4}{c}{error measure} \\
+  & \multicolumn{4}{c}{error metric} \\
  \hline
  net & mean & median & mode & probability\\
  \hline
- causal   & 4.904    & 5.066  & 9.421   &-1.764\\
- naive   & 1.482      & 1.703 & 1.762  &-1.342\\
- hill-climber   & 1.041      & 1.488 & 1.503  &-1.017\\
- grow-shrink   & 0.823     & 1.202  & 1.149 &-0.875\\
+ Causal   & 4.904    & 5.066  & 9.421   &-1.764\\
+ Naive   & 1.482      & 1.703 & 1.762  &-1.342\\
+ Hill-Climber   & 1.041      & 1.488 & 1.503  &-1.017\\
+ Grow-Shrink   & 0.823     & 1.202  & 1.149 &-0.875\\
+\end{tabular}
+\label{tab:crossvalidation}
+\end{table}
+
+The results in Table~\ref{tab:crossvalidation} confirm the findings of the validation section but now the confidence in these findings can be higher since they are averaged over a larger number of data. There is another advantage to cross-validation. Now that a good and reliable out-of-sample estimate is calculated one can go back and learn the final model on the whole data set. This way the error estimates become a kind of upper limit and one gains the advantage of learning on the whole data~\citep{LearningFromData}.\footnote{Another way of determining the reliability of the learned networks would be to analyze how strong they differ from each other. Good models should have a low diversity between each other although learned from different data sets. This idea is explored in the next section "Bias and Variance Decomposition".}
+%----------------------------------------------------------------------------------------
+
+\section{Bias-Variance Decomposition}
+
+Until now, two methods for estimating the prediction performance have been given. Both start from the conviction that what really matters is the out-of-sample performance, with cross-validation having the advantage of getting a reliable estimate by averaging the validation error of a set of models and nevertheless being able to learn the model on the entire data set.\\
+Now it would be interesting, given it is known that there are errors associated with the models, to have some guidance on how to improve the models. For this reason the bias-variance decomposition is introduced. It shares some similarities to cross-validation since both rely on learning a multitude of model. First, the bias-variance decomposition takes a step back to the in-sample mean squared error:
+
+\begin{equation*}
+\mathbb{E}_{out}(g^{(D)}) = \mathbb{E}_x[(g^{(D)}(x)-f(x))^2])
+\label{eqn:squared}
+\end{equation*}
+
+where the expected out-of sample error $\mathbb{E}_{out}(g^{(D)})$ is the expected value with respect to the probability distribution of the input features x of the difference between the hypothesis $g^{(D)}(x)$ and the target function f(x). The dependence of g on a certain data set D is made explicit. This can be eliminated by taking the expectation with respect to all data sets:
+
+\begin{equation*}\label{eqn:bv}
+\begin{split}
+\mathbb{E}_D [ \mathbb{E}_{out}(g^{(D)}) ] 
+ & = \mathbb{E}_D [ \mathbb{E}_x[(g^{(D)}(x)-f(x))^2] ]\\
+ & = \mathbb{E}_x [ \mathbb{E}_D[(g^{(D)}(x)-f(x))^2] ]\\
+ & = \mathbb{E}_x [ \mathbb{E}_D[(g^{(D)}(x)^2]-2\mathbb{E}_D[g^{(D)}(x)]f(x)+f(x)^2]\\
+\end{split}
+\end{equation*}
+
+The term $\mathbb{E}_D[g^{(D)}(x)]$ is a kind of average function which can be seen as generating different hypotheses from different data sets and averaging across these. By denoting the average function with $\bar{g}(x)$:
+
+\begin{equation*}\label{eqn:bv2}
+\begin{split}
+\mathbb{E}_D [ \mathbb{E}_{out}(g^{(D)}) ] 
+ & = \mathbb{E}_x [ \mathbb{E}_D[(g^{(D)}(x)^2]-2\bar{g}(x)f(x)+f(x)^2]\\
+ & = \mathbb{E}_x [ \mathbb{E}_D[(g^{(D)}(x)^2]-\bar{g}(x)^2+\bar{g}(x)^2-2\bar{g}(x)f(x)+f(x)^2]\\
+ & = \mathbb{E}_x [ \mathbb{E}_D[(g^{(D)}(x)-\bar{g}(x))^2 + (\bar{g}(x)-f(x))^2]\\
+\end{split}
+\end{equation*}
  
-\end{tabular}
-\caption[Crossvalidation Error]{error measures}
-\label{tab:3}
-\end{table}
-%----------------------------------------------------------------------------------------
+which can be divided into $bias(x) = (\bar{g}(x)-f(x))^2$ and $var(x) = \mathbb{E}_D[(g^{(D)}(x)-\bar{g}(x))^2$ so that:
 
-\section{Bias and Variance Decomposition}
+\begin{equation*}\label{eqn:bv3}
+\begin{split}
+\mathbb{E}_D [ \mathbb{E}_{out}(g^{(D)}) ] 
+ & = \mathbb{E}_x [ bias(x) + var(x)]\\
+ & = bias + var
+\end{split}
+\end{equation*}
+
+The bias can be thought of how close the average function $\bar{g}(x)$ is to the target function f(x). The variance describes how much the models from different data sets vary with respect to each other.\\
+Through this decomposition of the mean squared error it is possible to identify potential for improvement. Consider the case where the bias is large. This means, even learning from models of different data sets, the average of these models is still far from the target function. The model is too simple and would benefit from some additional features. This corresponds to the case of underfitting. If the variance is large that suggests that models from different sub-samples of the data lead to very different predictions. This is a case of overfitting~\citep{LearningFromData}.
+Diagnosing bias and variance can also be done by comparing the training or in-sample error with a cross-validation error. A setting of high bias would correspond to high values in both the training and cross-validation error because the hypothesis is to simple to catch the underlying relationships and consequently underfitting. A high variance scenario is characterized by a low training error and a high cross-validation error, showing that the hypothesis has overfit the target function.\\
+It should be noted that this definition of the bias-variance decomposition assumes no noise in the data. This can contribute to the variance. Besides, the errors are calculate using the middle of the discrete intervals for PGA, but the differences are calculated with the continuous data. Some of the errors account for the fact that discrete Bayesian Networks where used and not continuous ones. For calculating the bias and variance the networks learned by cross-validation were used. It might be good to have a look how these estimates change using more than ten different data sets. This would be very time consuming considering the duration of the computations.\\\\
+
+Table~\ref{tab:bias} and~\ref{tab:variance} show the results for the bias and variance, respectively. The vast majority of the error is made up by the bias. This suggests that the learning algorithm suffers from underfitting. One reason could be that, although using a Bayesian approach to ground motion modeling, no prior knowledge about the parameters of the variables was specified\footnote{I haven't found any hint how the bnlearn package treats parameter estimation through maximum aposteriori probabilities. I am just assuming that a Dirichlet distribution with equal probability for different values of the parameters is used as prior. Essentially a uniform distribution. This would fit the observation that the data was underfit.}. This can suggest that the prior used was not very informative and acted as a strong regularization term.
 
 \begin{table}[h]
+\caption[Bias]{Estimates of the Bias for different error metrics and different networks.}
 \centering
 \begin{tabular}{ l l l l }
  \hline
- & \multicolumn{3}{c}{error measure} \\
+ & \multicolumn{3}{c}{error metric} \\
  \hline
  net & mean & median & mode\\
  \hline
- causal & 4.876 & 5.007 & 9.233\\
- naive & 1.472 & 1.682 & 1.709\\
- hill-climber & 1.029 & 1.341 & 1.478\\
- grow-shrink & 0.786 & 1.115 & 1.152\\
+ Causal & 4.876 & 5.007 & 9.233\\
+ Naive Bayes& 1.472 & 1.682 & 1.709\\
+ Hill-Climber & 1.029 & 1.341 & 1.478\\
+ Grow-Shrink & 0.786 & 1.115 & 1.152\\
 \end{tabular}
-\caption[Bias]{error measures}
-\label{tab:4}
+\label{tab:bias}
 \end{table}
 
 \begin{table}[h]
+\caption[Variance]{Estimates of the Variance for different error metrics and different networks.}
 \centering
 \begin{tabular}{ l l l l }
  \hline
-  & \multicolumn{3}{c}{error measure} \\
+  & \multicolumn{3}{c}{error metric} \\
  \hline
  net & mean & median & mode\\
  \hline
- causal & 0.01& 0.185 & 1.661\\
- naive & 0.0091 & 0.136 & 0.546\\
- hill-climber & 0.0032 & 0.0694 & 0.128\\
- grow-shrink & 0.003 & 0.0622& 0.092\\
+ Causal & 0.01& 0.185 & 1.661\\
+ Naive Bayes& 0.0091 & 0.136 & 0.546\\
+ Hill-Climber & 0.0032 & 0.0694 & 0.128\\
+ Grow-Shrink & 0.003 & 0.0622& 0.092\\
 \end{tabular}
-\caption[Variance]{error measures}
-\label{tab:5}
+\label{tab:variance}
 \end{table}
