@@ -20,47 +20,12 @@ packages = c("bnlearn", "Rgraphviz")
 
 loadPackages(packages)
 
-# load and visualize data ####
-
-# read data
-data <- read.csv(file = "data.dat") 
-
-# matrix plot of all variables
-
-cairo_pdf(file = "..\\Figures\\allvsall.pdf",
-          height = 9,
-          width = 16)
-
-plot(data, 
-     main = "Scatterplot Matrix of all Variables", 
-     col  = rgb(0, 0, 100, 50, maxColorValue = 255))
-
-Sys.sleep(600)
-
-dev.off()
-#histograms
-#par(mfrow=c(3,2))
-#hist(data$SD)
-#box()
-#hist(data$Q0)
-#box()
-#hist(data$kappa)
-#box()
-#hist(data$Vs30)
-#box()
-#hist(data$MAG)
-#box()
-#hist(data$DIST)
-#box()
-
-
-#par(op)
-#options(settings)
-#hist(data$PGA)
-
-#hist(data$PGA, c(min(data$PGA),-5.135, -3.722, -2.627, -1.20742, 0.145, 1.657, 3.175, max(data$PGA)))
 
 # divide into learn and test data ####
+
+
+# read data
+data = read.csv(file = "data.dat") 
 
 # make copy of data
 data.disc = data
